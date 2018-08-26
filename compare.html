@@ -1,0 +1,632 @@
+<body onload="bdload()">
+<style type="text/css">
+table{
+	font-family: "Tahoma", Verdana, Arial, Helvetica, sans-serif;
+	font-size:90%;
+	border-collapse: collapse;
+	width: 90%
+}
+
+caption{
+	background: url(title.png) no-repeat 50px;
+
+	text-indent: -10000px;
+}
+
+thead tr{
+	background-color: #D9FFD9;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+}
+
+tfoot tr{
+	background-color: #FFFFFF;
+}
+
+thead th{
+	padding: 0.5em;
+	white-space: nowrap;
+}
+
+tfoot th{
+	
+	text-align: right;
+	padding-right: 0.5em;
+	letter-spacing: 1px;
+	background:  
+}
+
+tfoot td{
+	padding-left: 0.5em;
+	color: red;
+	font-size:90%;
+	font-weight: 600;
+}
+
+tfoot td:hover{
+	background-color: red;
+	color: white;
+}
+
+tr{
+	background-color: #EAFDFF;
+}
+
+tr.odd{
+	background-color: #FFFFFF;
+	font-size:90%;
+}
+
+
+td, th{
+	border: 1px dotted #CCCCCC;
+	font-size:90%;
+}
+
+td.f_name{
+	background-color: #FFFF80;
+	width: 10%;
+	font-size:90%;
+}
+
+tbody td
+{
+	padding: 0.5em;
+	font-size:90%;
+}
+
+td a:link, th a:link{
+	color: black;
+}
+
+td a:visited, th a:visited{
+	color: black;
+	text-decoration: line-through;
+}
+
+td a:hover, th a:hover{
+	color: purple;
+	text-decoration: underline;
+}
+
+td:last-child a:hover{
+	color: red;
+	text-decoration: underline overline;
+}
+</style>
+<iframe id="f1" src="DB1.html" style="display:none"></iframe>
+<iframe id="f2" src="DB2.html" style="display:none"></iframe>
+<iframe id="f3" src="IMG1.html" style="display:none"></iframe>
+<iframe id="f4" src="IMG2.html" style="display:none"></iframe>
+
+<DIV id="result_div">
+
+</DIV>
+
+</body>
+
+<script src="./dist/Chart.min.js"></script>
+<script src="./dist/Chart.js"></script>
+
+<script>
+var ary_feature_names=new Array();
+
+function bdload()
+{
+
+var f1=document.getElementById("f1");
+var f2=document.getElementById("f2");
+var f3=document.getElementById("f3");
+var f4=document.getElementById("f4");
+var doc1= f1.contentWindow || f1.contentDocument;
+var doc2= f2.contentWindow || f2.contentDocument;
+var doc3= f3.contentWindow || f3.contentDocument;
+var doc4= f4.contentWindow || f4.contentDocument;
+var tb1,tb2,tb3,tb4;
+try {if(doc1.document){tb1=doc1.document;}}catch(err){}
+try {if(doc2.document){tb2=doc2.document;}}catch(err){}
+try {if(doc3.document){tb3=doc3.document;}}catch(err){}
+try {if(doc4.document){tb4=doc4.document;}}catch(err){}
+if(tb1){tb1=tb1.getElementById("tb1");}
+if(tb2){tb2=tb2.getElementById("tb1");}
+if(tb3){tb3=tb3.getElementById("tb1");}
+if(tb4){tb4=tb4.getElementById("tb1");}
+getAll_Feature_Name(tb1);
+getAll_Feature_Name(tb2);
+getAll_Feature_Name(tb3);
+getAll_Feature_Name(tb4);
+var tb_str="<table style=\"font-size:16px\"></table>" + "<table style=\"width:30%\" >"+
+"<tr><td bgcolor=red width=30% ></td><td>Failed</td></tr>"+
+"<tr><td bgcolor=#DADADA width=30% ></td><td>Not Available Yet</td></tr>"+
+"<tr><td>DB_New</td><td>statistics_HERE_2018_6_Germany_latest.txt </td></tr>" +
+"<tr><td>DB Old</td><td>statistics_HERE_2018_5_Germany_829.txt </td></tr>"
+"</table>";
+document.getElementById("result_div").innerHTML="<table><tr><td>"+tb_str+"</td></tr><tr><td></td></tr>";
+document.getElementById("result_div").innerHTML+="<tr><td><table border=1 id=result_tb_1>"+compare_tb(tb1,tb2,tb3,tb4)+"</table></td></tr>";
+//validation part
+try {if(doc1.document){tb1=doc1.document;}}catch(err){}
+try {if(doc2.document){tb2=doc2.document;}}catch(err){}
+if(tb1){tb1=tb1.getElementById("tb2");}
+if(tb2){tb2=tb2.getElementById("tb2");}
+ary_feature_names=new Array();
+getAll_Feature_Name(tb1);
+getAll_Feature_Name(tb2);
+document.getElementById("result_div").innerHTML+="<tr><td><table border=1 id=result_tb_2>"+compare_tb(tb1,tb2,tb3,tb4)+"</table></td></tr>";
+document.getElementById("result_div").innerHTML+="</table>";
+
+//Info part
+
+try { if (doc1.document) { tb1 = doc1.document; } } catch (err) { }
+try { if (doc2.document) { tb2 = doc2.document; } } catch (err) { }
+if (tb1) { tb1 = tb1.getElementById("tb4"); }
+if (tb2) { tb2 = tb2.getElementById("tb4"); }
+ary_feature_names = new Array();
+getAll_Feature_Name(tb1);
+getAll_Feature_Name(tb2);
+document.getElementById("result_div").innerHTML += "<tr><td><table border=1 id=result_tb_2>" + display_tb(tb1, tb2) + "</table></td></tr>";
+document.getElementById("result_div").innerHTML += "</table>";
+
+//Warning part
+
+try {if(doc1.document){tb1=doc1.document;}}catch(err){}
+try {if(doc2.document){tb2=doc2.document;}}catch(err){}
+if(tb1){tb1=tb1.getElementById("tb3");}
+if(tb2){tb2=tb2.getElementById("tb3");}
+ary_feature_names=new Array();
+getAll_Feature_Name(tb1);
+getAll_Feature_Name(tb2);
+document.getElementById("result_div").innerHTML+="<tr><td><table border=1 id=result_tb_2>"+display_tb(tb1, tb2)+"</table></td></tr>";
+document.getElementById("result_div").innerHTML+="</table>";
+
+}
+
+function getAll_Feature_Name(in_tb)
+{
+
+if(!in_tb){return;}
+var i=0;
+for(i=1;i<in_tb.rows.length;i++)
+	{
+	
+	if(ary_feature_names[in_tb.rows[i].cells[0].innerHTML]==null)
+		{
+		ary_feature_names[in_tb.rows[i].cells[0].innerHTML]="1";
+		
+		}
+	}
+}
+
+function compare_tb(tb1, tb2, tb3, tb4)
+{
+
+var rt="";
+var i=1;
+for(key in ary_feature_names)
+	{
+	if(rt==""){rt=writeFirstRow(tb1, tb2, tb3, tb4);}
+	item_name=key;
+	rt=rt +"<tr>";
+	rt=rt +"<td class=\"f_name\">"+item_name+"</td>";
+	var total_value=0;
+	if(tb1!=null)
+		{
+		tb1_value=getCellValueByRowName(tb1,item_name);
+		total_value1=getTotalCount(tb1_value);
+		tb1_value=hide_detail(tb1_value);
+		if(total_value1=="N/A"){rt=rt +"<td bgcolor=\"#DADADA\">"+total_value1+"</td>";}
+		else{
+			if(total_value1 - 0 > 0)
+			{
+			rt=rt +"<td bgcolor=\"#FF0827\">"+total_value1+"</td>";
+			}
+			else
+			{
+			rt=rt +"<td>"+total_value1+"</td>";
+			}	
+		}
+		if(tb1_value=="NA"){rt=rt +"<td width=\"10%\" bgcolor=\"#DADADA\">"+tb1_value+"</td>";}else{rt=rt +"<td width=\"10%\">"+tb1_value+"</td>";}
+		}
+	if(tb2!=null)
+		{
+		tb2_value=getCellValueByRowName(tb2,item_name);
+		total_value2=getTotalCount(tb2_value);
+		tb2_value=hide_detail(tb2_value);
+		if(total_value2=="N/A"){rt=rt +"<td bgcolor=\"#DADADA\">"+total_value2+"</td>";}
+		else{
+			if(total_value2 - 0 > 0)
+			{
+			rt=rt +"<td bgcolor=\"#FF0827\">"+total_value2+"</td>";
+			}
+			else
+			{
+			rt=rt +"<td>"+total_value2+"</td>";
+			}	
+		}
+		if(tb2_value=="NA"){rt=rt +"<td width=\"10%\" bgcolor=\"#DADADA\">"+tb2_value+"</td>";}else{rt=rt +"<td width=\"10%\" >"+tb2_value+"</td>";}
+		var diff="NA";
+		if(total_value1=="N/A" || total_value2=="N/A")
+		{
+			diff='NA'
+		}
+		else if(total_value1=="pass" && total_value2=="pass")
+		{
+			diff="pass"
+		}
+		else if(total_value2=="pass" && total_value1 > 0)
+		{
+			diff="fail"
+		}
+		else if(total_value1=="pass")
+		{
+			diff="pass"
+		}
+		if(!isNaN(total_value1) && !isNaN(total_value2))
+			{
+			diff=total_value1-total_value2;
+			if(diff<0){diff="<font color=red>"+diff+"</font>";}
+			}
+		if(diff=="NA"){rt=rt +"<td bgcolor=\"#DADADA\">"+diff+"</td>";}else if(diff=="fail"){rt=rt +"<td bgcolor=red>"+diff+"</td>";}else{rt=rt +"<td>"+diff+"</td>";}
+		}
+	if(tb1!=null && tb2!=null)
+	{
+		tb1_value = getCellValueByRowName(tb1,item_name);
+		tb2_value = getCellValueByRowName(tb2,item_name);	
+		total_value1 = getTotalCount(tb1_value);
+		total_value2 = getTotalCount(tb2_value);
+		var detail_diff_org = "";
+		if(!isNaN(total_value1) && !isNaN(total_value2))
+		{
+			detail_diff_org = getDetailDiff(tb1_value, tb2_value);
+			detail_diff_hide = hide_detail(detail_diff_org);
+			rt = rt + "<td>" + detail_diff_hide + "</td>";
+			rt = rt + "<td>" + addCanvas(i) + "</td>";
+            genBarTest(i);
+		}
+		else
+		{
+			rt += "<td width=\"10%\" bgcolor=\"#DADADA\">NA</td>";
+			rt += "<td width=\"10%\" bgcolor=\"#DADADA\">NA</td>";
+		}
+	}
+	if(tb3!=null)
+		{
+		tb3_value=getCellValueByRowName(tb3,item_name);
+		total_value3=getTotalCount(tb3_value);
+		tb3_value=hide_detail(tb3_value);
+		if(total_value3=="NA"){rt=rt +"<td bgcolor=\"#DADADA\">"+total_value3+"</td>";}else{rt=rt +"<td>"+total_value3+"</td>";}
+		if(tb3_value=="NA"){rt=rt +"<td width=\"10%\" bgcolor=\"#DADADA\">"+tb3_value+"</td>";}else{rt=rt +"<td width=\"10%\" >"+tb3_value+"</td>";}
+		}
+	if(tb4!=null)
+		{
+		tb4_value=getCellValueByRowName(tb4,item_name);
+		total_value4=getTotalCount(tb4_value);
+		tb4_value=hide_detail(tb4_value);
+		if(total_value4=="NA"){rt=rt +"<td bgcolor=\"#DADADA\">"+total_value4+"</td>";}else{rt=rt +"<td>"+total_value4+"</td>";}
+		if(tb4_value=="NA"){rt=rt +"<td width=\"10%\" bgcolor=\"#DADADA\">"+tb4_value+"</td>";}else{rt=rt +"<td width=\"10%\" >"+tb4_value+"</td>";}
+		var diff="NA";
+		if(!isNaN(total_value3) && !isNaN(total_value4))
+			{
+			diff=total_value3-total_value4;
+			if(diff<0){diff="<font color=red>"+diff+"</font>";}
+			}
+		if(diff=="NA"){rt=rt +"<td bgcolor=\"#DADADA\">"+diff+"</td>";}else{rt=rt +"<td>"+diff+"</td>";}
+		}
+	if(tb1!=null && tb3!=null)
+		{
+		var diff="NA";
+		if(!isNaN(total_value1) && !isNaN(total_value3))
+			{
+			diff=total_value1-total_value3;
+			if(diff<0){diff="<font color=red>"+diff+"</font>";}
+			}
+		if(diff=="NA"){rt=rt +"<td bgcolor=\"#DADADA\">"+diff+"</td>";}else{rt=rt +"<td>"+diff+"</td>";}
+		}
+	rt=rt +"</tr>";
+	i++;
+	}
+return rt;
+
+}
+
+function display_tb(tb1, tb2) {
+
+    var rt = "";
+    var i = 1;
+    for (key in ary_feature_names) {
+        if (rt == "") { rt = writeFirstRow_Display(tb1, tb2); }
+        item_name = key;
+        rt = rt + "<tr>";
+        rt = rt + "<td class=\"f_name\">" + item_name + "</td>";
+        var total_value = 0;
+        if (tb1 != null) {
+            tb1_value = getCellValueByRowName(tb1, item_name);
+            total_value1 = getTotalCount(tb1_value);
+            tb1_value = hide_detail(tb1_value);
+            if (total_value1 == "NA") { rt = rt + "<td bgcolor=\"#DADADA\">" + total_value1 + "</td>"; } else { rt = rt + "<td>" + total_value1 + "</td>"; }
+            if (tb1_value == "NA") { rt = rt + "<td width=\"10%\" bgcolor=\"#DADADA\">" + tb1_value + "</td>"; } else { rt = rt + "<td width=\"10%\">" + tb1_value + "</td>"; }
+        }
+        if (tb2 != null) {
+            tb2_value = getCellValueByRowName(tb2, item_name);
+            total_value2 = getTotalCount(tb2_value);
+            tb2_value = hide_detail(tb2_value);
+            if (total_value2 == "NA") { rt = rt + "<td bgcolor=\"#DADADA\">" + total_value2 + "</td>"; } else { rt = rt + "<td>" + total_value2 + "</td>"; }
+            if (tb2_value == "NA") { rt = rt + "<td width=\"10%\" bgcolor=\"#DADADA\">" + tb2_value + "</td>"; } else { rt = rt + "<td width=\"10%\" >" + tb2_value + "</td>"; }
+        }
+
+        rt = rt + "</tr>";
+        i++;
+    }
+    return rt;
+
+}
+
+function getTotalCount(in_str)
+{
+if(in_str.toLowerCase().indexOf("<table")<0){return in_str;}
+var obj=document.createElement("div");
+obj.innerHTML=in_str;
+var obj_table=obj.firstChild;
+obj.appendChild(obj_table);
+obj=obj.firstChild;
+var total_count=0;
+var i=0;
+for(i=1;i<obj.rows.length;i++)
+	{
+	if(! isNaN(obj.rows[i].cells[1].innerHTML))
+		{
+		total_count=total_count+(parseInt(obj.rows[i].cells[1].innerHTML));
+		}
+	else if(obj.rows[i].cells[1].innerHTML=="NA")
+		{
+		total_count="NA"
+		}
+	}
+return total_count;
+}
+
+function RemoveElement(elemID)
+{
+	var elem = document.getElementById(elemID);
+	if(elem.parentNode){
+		elem.parentNode.removeChild(elem);
+	}
+	return elem
+}
+
+function getDetailDiff(in_tb1, in_tb2)
+{
+	if(in_tb1.toLowerCase().indexOf("<table") < 0 || in_tb2.toLowerCase().indexOf("<table") < 0){return '';}
+	var rt_diff = "";
+	rt_diff = in_tb1;
+	var obj1 = document.createElement("div");
+    var obj2 = document.createElement("div");
+	var objDiff = document.createElement("div");
+    obj1.innerHTML = in_tb1;
+    obj2.innerHTML = in_tb2;
+	objDiff.innerHTML = rt_diff;
+    var obj1_table = obj1.firstChild;
+    var obj2_table = obj2.firstChild;
+	var objDiff_table = objDiff.firstChild;
+    obj1.appendChild(obj1_table);
+    obj2.appendChild(obj2_table);
+	objDiff.appendChild(objDiff_table);
+    var obj1_t = obj1.firstChild;
+    var obj2_t = obj2.firstChild;
+	var objDiff_t = objDiff.firstChild;
+    var i = 0;
+    var diff_count = 0;
+    for(i = 1; i < obj1.firstChild.rows.length; i++)
+    {
+        if(!isNaN(obj1.firstChild.rows[i].cells[1].innerHTML) && !isNaN(obj2.firstChild.rows[i].cells[1].innerHTML))
+        {
+            diff_count = (parseInt(obj1.firstChild.rows[i].cells[1].innerHTML)) - (parseInt(obj2.firstChild.rows[i].cells[1].innerHTML));
+        }
+        else if(obj1.firstChild.rows[i].cells[1].innerHTML == "NA" || obj2.firstChild.rows[i].cells[1].innerHTML ==  "NA")
+        {
+            diff_count = "NA";
+        }
+		objDiff.firstChild.rows[i].cells[1].innerHTML = diff_count.toString(10);
+    }
+	return objDiff.innerHTML; 
+}
+
+function addCanvas(id)
+{
+	return "<canvas id=\"Canvas_" + id + "\"/>";
+	//var canv = document.createElement("canvas");
+	//canv.setAttribute('id', id);
+	//canv.setAttribute('width', 400);
+	//canv.setAttribute('height', 400);
+	//var body = document.getElementsByTagName("body")[0];
+	//body.appendChild(canv);
+	//return canv.innerText;
+}
+
+function addCanvasScript(id)
+{
+    if(isNaN(document.getElementById(id)))
+    {
+        return "";
+    }
+    var script = document.createElement('script');
+    var rt = "var ctx = document.getElementById('" + id + "').getContext('2d');";
+    rt += "\
+	    var data = {\
+			labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],\
+			datasets: [{\
+				data: [12, 19, 3, 5, 2, 3],\
+				borderWidth: 1\
+			}]\
+		};"
+    script.innerHTML = rt;
+    document.body.appendChild(script);
+}
+
+function genCanvas(in_tb, number)
+{
+	if(in_tb.toLowerCase().indexOf("<table")<0){return "";}
+	var rtn = "";
+	var obj=document.createElement("table");
+	obj.innerHTML=in_tb;
+	var i=0;
+	var count=0;
+	var canGen = false;
+	for(i=1;i<obj.rows.length;i++)
+	{
+		if(!isNaN(obj.rows[i].cells[1].innerHTML))
+		{
+			canGen = true;
+		}
+	}
+	if(canGen)
+	{
+		rtn += addCanvas(number);
+	}
+	return rtn;
+}
+
+function genBarTest(id)
+{
+    addCanvasScript("Canvas_" + id);
+}
+
+function genBarPlot(in_tb)
+{
+	if(in_tb.toLowerCase().indexOf("<table")<0){return "";}
+	var rtn = "";
+	var obj=document.createElement("table");
+	obj.innerHTML=in_tb;
+	var fields = new Array();
+	var vvalues = new Array();
+	var i=0;
+	var count=0;
+	for(i=1;i<obj.rows.length;i++)
+	{
+		if(!isNaN(obj.rows[i].cells[1].innerHTML))
+		{
+			fields.push(obj.rows[i].cells[0].innerHTML);
+			vvalues.push(parseInt(obj.rows[i].cells[1].innerHTML));
+			addCanvasScript("Canvas_" + i.toString(), fields, vvalues);
+		}
+	}
+}
+
+function hide_detail(in_str)
+{
+if(in_str.toLowerCase().indexOf("<table")<0){return "";}
+var rt="<table><tr onclick=\"if(this.nextSibling.style.display==''){this.nextSibling.style.display='none';}else{this.nextSibling.style.display='';}\"><td align=center>Detail</td></tr><tr style=\"display:none\"><td>"+in_str+"</td></tr></table>";
+return rt;
+}
+
+function writeFirstRow(tb1, tb2, tb3, tb4)
+{
+var rt="<thead><tr>";
+rt=rt+"<td>Feature_Name</td>";
+if(tb1 !=null && tb1.rows.length>0)
+	{
+	rt=rt+"<td>"+tb1.rows[0].cells[1].innerHTML+"_DB_New</td>";
+	rt=rt+"<td>Detail</td>";
+	}
+if(tb2 !=null && tb2.rows.length>0)
+	{
+	rt=rt+"<td>"+tb2.rows[0].cells[1].innerHTML+"_DB_Old</td>";
+	rt=rt+"<td>Detail</td>";
+	rt=rt+"<td>DB_DIFF</td>";
+	rt=rt+"<td>DB_Detail_DIFF</td>";
+	rt=rt+"<td>DB_Detail_DIFF_PLOT</td>";
+	}
+if(tb3 !=null && tb3.rows.length>0)
+	{
+	rt=rt+"<td>"+tb3.rows[0].cells[1].innerHTML+"_IMG_New</td>";
+	rt=rt+"<td>Detail</td>";
+	}
+if(tb4 !=null && tb4.rows.length>0)
+	{
+	rt=rt+"<td>"+tb4.rows[0].cells[1].innerHTML+"_IMG_Old</td>";
+	rt=rt+"<td>Detail</td>";
+	rt=rt+"<td>IMG_DIFF</td>";
+	}
+if(tb1 !=null && tb3 !=null)
+	{
+	rt=rt+"<td>DB_IMG_DIFF</td>";
+	}
+rt=rt+"</tr></thead>";
+
+return rt;
+}
+
+function writeFirstRow_Display(tb1, tb2) {
+    var rt = "<thead><tr>";
+    rt = rt + "<td>Feature_Name</td>";
+    if (tb1 != null && tb1.rows.length > 0) {
+        rt = rt + "<td>" + tb1.rows[0].cells[1].innerHTML + "_DB_New</td>";
+        rt = rt + "<td>Detail</td>";
+    }
+    if (tb2 != null && tb2.rows.length > 0) {
+        rt = rt + "<td>" + tb2.rows[0].cells[1].innerHTML + "_DB_Old</td>";
+        rt = rt + "<td>Detail</td>";
+    }
+
+    rt = rt + "</tr></thead>";
+
+    return rt;
+}
+
+function getCellValueByRowName(in_tb, in_name)
+{
+if(in_tb == null){return "";}
+var rt="NA";
+for(in_tb_i=0;in_tb_i<in_tb.rows.length;in_tb_i++)
+	{
+	
+	if(in_tb.rows[in_tb_i].cells[0].innerHTML==in_name)
+		{
+		rt=in_tb.rows[in_tb_i].cells[1].innerHTML;
+		}
+	}
+return rt;
+}
+
+function decorate_table(in_tb)
+{
+if(!in_tb){return;}
+var i=0;
+var j=0;
+for(i=1;i<in_tb.rows.length;i++)
+{
+	var single_row=in_tb.rows[i];
+	var bln_found_available=false;
+	var bln_all_zero=true;
+	for(j=1;j<single_row.cells.length;j++)
+	{
+		var single_cell=single_row.cells[j];
+		if(in_tb.rows[0].cells[j].innerHTML.indexOf("VALUE_")!=-1)
+			{
+				{
+				bln_found_available=true;
+				}
+			if( single_cell.innerHTML!="0")	
+				{
+				bln_all_zero=false;
+				}
+			}
+	}
+	if(!bln_found_available)
+	{
+		for(j=0;j<single_row.cells.length;j++)
+		{
+		var single_cell=single_row.cells[j];
+		single_cell.style.backgroundColor="#DADADA";
+		}
+	}
+	if(bln_all_zero)
+	{
+		for(j=0;j<single_row.cells.length;j++)
+		{
+		var single_cell=single_row.cells[j];
+		single_cell.style.backgroundColor="#FF0827";
+		}
+	}
+}
+}
+</script>
